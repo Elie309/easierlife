@@ -1,0 +1,62 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+@layer base {
+
+    /* 
+       #FDFFFC
+       #F96E46
+       #141d22
+       #780116
+    */
+
+
+    :root {
+        --color-text-base: 20, 29, 34; /* #141d22 */
+        --color-text-muted: 107, 114, 128; /* #6b7280 */
+        --color-text-inverted: 29, 78, 216; /* #1d4ed8 */
+        --color-text-white:  253, 255, 252; /* #FDFFFC */
+
+
+        --color-fill:253, 255, 252; /* #FDFFFC */
+        --color-fill-muted: 241, 240, 240; /* #F1F0F0 */
+        --color-fill-inverted: 29, 78, 216; /* #1d4ed8 */
+
+        --fill-primary: 107, 114, 128; /* #6b7280 */
+        --fill-secondary:  29, 78, 216; /* #1d4ed8 */
+
+
+
+        --color-button-accent:  29, 78, 216; /* #1d4ed8 */
+        --color-button-accent-hover: 107, 114, 128; /* #6b7280 */
+        --color-button-muted: 253, 255, 252; /* #FDFFFC */
+
+
+        --color-border-base: 107, 114, 128;/* #6b7280 */
+        --color-border-inverted: 29, 78, 216; /* #1d4ed8 */
+      }
+      .theme-dark {
+
+        --color-text-base: 253, 255, 252; /* #FDFFFC */
+        --color-text-muted: 107, 114, 128; /* #6b7280 */
+        --color-text-inverted:   202, 57, 81 ; /*  #ca3951 */;
+
+        --color-fill: 20, 29, 34; /* #141d22 */
+        --color-fill-muted: 35, 41, 44; /* #23292C */
+        --color-fill-inverted: 202, 57, 81 ; /*  #ca3951 */;
+
+        --fill-primary: 253, 255, 252; /* #FDFFFC */
+        --fill-secondary: 202, 57, 81 ; /*  #ca3951 */;
+
+        --color-button-accent: 202, 57, 81 ; /*  #ca3951 */;
+        --color-button-accent-hover: 107, 114, 128; /* #6b7280 */
+        --color-button-muted: 253, 255, 252; /* #FDFFFC */
+
+        --color-border-base: 107, 114, 128; /* #6b7280 */
+        --color-border-inverted: 202, 57, 81 ; /*  #ca3951 */;
+      }
+
+
+}
