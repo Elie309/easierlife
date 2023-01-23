@@ -8,7 +8,7 @@ interface Props {
 
 export default function TodoSVGComponent(props: Props) {
     return (
-        <svg className={`${props.className}`} xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 64 64" viewBox="0 0 64 64">
+        <svg height="16px" className={`${props.className}`} xmlns="http://www.w3.org/2000/svg" enableBackground="new 0 0 64 64" viewBox="0 0 64 64">
             <path className={`${props.fillPrimary}`} d="M45.17 64H5.44c-1.55 0-2.81-1.26-2.81-2.81V12.47c0-1.54 1.26-2.8 2.81-2.8h5.39c.54 0 .97.43.97.97 0 .54-.43.97-.97.97H5.44c-.49 0-.87.38-.87.86v48.72c0 .48.39.87.87.87h39.73c.48 0 .86-.39.86-.87V44.2c0-.54.43-.97.97-.97.54 0 .97.43.97.97v16.99C47.97 62.74 46.71 64 45.17 64zM47 31.39c-.54 0-.97-.43-.97-.97V12.47c0-.48-.39-.86-.86-.86h-5.39c-.54 0-.97-.43-.97-.97 0-.54.43-.97.97-.97h5.39c1.54 0 2.8 1.26 2.8 2.8v17.95C47.97 30.96 47.53 31.39 47 31.39z" />
             <path className={`${props.fillPrimary}`} d="M39.85,14.88h-29.1c-0.54,0-0.97-0.43-0.97-0.97v-2.38c0-3.52,2.86-6.38,6.38-6.38h3.1
 					C19.72,2.23,22.26,0,25.3,0c3.04,0,5.58,2.23,6.04,5.15h3.1c3.52,0,6.38,2.86,6.38,6.38v2.38

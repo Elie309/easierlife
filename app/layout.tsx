@@ -1,13 +1,10 @@
 
 import './globals.css'
 import Nav from '@/components/Nav'
-import { cookies } from 'next/headers'
 
 
 export default function RootLayout({children, }: { children: React.ReactNode }) {
 
-  const cookiesList = cookies()
-  const hasCookie = cookiesList.has('theme')
 
   return (
     <html lang="en">
@@ -16,7 +13,7 @@ export default function RootLayout({children, }: { children: React.ReactNode }) 
         head.tsx. Find out more at https://beta.nextjs.org/docs/api-reference/file-conventions/head
       */}
       <head />
-      <body className='theme-dark bg-skin-fill'>
+      <body className='bg-skin-fill'>
         <Nav />
 
         {children}

@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+html, body {
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 
 @layer base {
 
@@ -30,7 +40,7 @@
 
 
         --color-button-accent:  29, 78, 216; /* #1d4ed8 */
-        --color-button-accent-hover: 107, 114, 128; /* #6b7280 */
+        --color-button-accent-hover: 5, 58, 206; /* #053ACE */
         --color-button-muted: 253, 255, 252; /* #FDFFFC */
 
 
@@ -51,7 +61,7 @@
         --fill-secondary: 202, 57, 81 ; /*  #ca3951 */;
 
         --color-button-accent: 202, 57, 81 ; /*  #ca3951 */;
-        --color-button-accent-hover: 107, 114, 128; /* #6b7280 */
+        --color-button-accent-hover: 190, 34, 60; /* #BE223C */
         --color-button-muted: 253, 255, 252; /* #FDFFFC */
 
         --color-border-base: 107, 114, 128; /* #6b7280 */
