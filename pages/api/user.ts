@@ -1,9 +1,15 @@
 import { NextApiRequest, NextApiResponse } from "next";
 
-
-function user(req: NextApiRequest, res: NextApiResponse) {
-  res.status(200).json({ name: "John Doe" });
-};
+import getFirebaseApp from "./firebase";
 
 
-export default user;
+export default async function User(req: NextApiRequest, res: NextApiResponse){
+
+  res.statusCode = 200;
+  res.setHeader("Content-Type", "application/json");
+
+   // "FirebaseApp"
+
+  res.end(JSON.stringify({ name: getFirebaseApp().name }));
+
+}

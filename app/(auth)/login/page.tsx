@@ -5,7 +5,7 @@ export default function LoginPage() {
   return (
     <>
       <AuthComponent
-        type="login" 
+        type="LOGIN" 
         title="Welcome Back!"
         link="/register"
         linkText="Don't have an account? Register!"

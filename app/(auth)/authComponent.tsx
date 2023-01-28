@@ -3,22 +3,38 @@
 import React from 'react'
 import FormInput from '@/components/FormInput'
 import Link from 'next/link';
+import { regEmail, regPasswordForLogin, regPasswordForRegistration } from '@/config';
 
 
 type Props = {
-    type: "login" | "register",
+    type: "LOGIN" | "REGISTER",
     title: string,
     link: string,
     linkText: string,
     buttonText: string,
 }
 
-export default function AuthComponent(props: Props) {
+export default async function AuthComponent(props: Props) {
 
     let EmailRef = React.useRef<FormInput>(null);
     let PasswordRef = React.useRef<FormInput>(null);
 
+    const FormHandler = (e: React.MouseEvent) => {
+        e.preventDefault();
 
+        let email = EmailRef.current?.getValue();
+        let password = PasswordRef.current?.getValue();
+
+        if (EmailRef.current?.isValueCorrect() && PasswordRef.current?.isValueCorrect()) {
+
+            if (props.type === "LOGIN") {
+                console.log("Login")
+            } else {
+                console.log("Register")
+            }
+        }
+
+    }
    
 
     return (
@@ -35,6 +51,7 @@ export default function AuthComponent(props: Props) {
                 name="email"
                 type="email"
                 placeHolder="Email"
+                regExp={regEmail}
                 ref={EmailRef}
             />
 
@@ -44,11 +61,21 @@ export default function AuthComponent(props: Props) {
                 name="password"
                 type="password"
                 placeHolder="Password"
+                regExp={props.type === "LOGIN" ? regPasswordForLogin : regPasswordForRegistration}
+                
+                errorMessage={
+                    props.type === "LOGIN" ?
+                    "Password must be at least 8 characters long"
+                    :
+                    "Password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one number and one special character"
+
+                    }
+                
                 ref={PasswordRef}
             />
 
             <button
-
+                onClick={FormHandler}
                 className="w-2/4 md:w-1/4 my-2 p-2 
                   text-md bg-skin-button-accent hover:bg-skin-button-accent-hover 
                   text-skin-white font-bold 
