@@ -1,7 +1,12 @@
 import React from 'react'
-import AuthComponent from '../authComponent'
+
+import AuthComponent from '@/app/(auth)/authComponent'
+
 
 export default function LoginPage() {
+
+
+
   return (
     <>
       <AuthComponent

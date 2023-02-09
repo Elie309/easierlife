@@ -222,6 +222,7 @@ export default class FormInput extends Component<Props, State> {
                     name={name}
                     className={`w-full h-10 p-3 ${this.isPassword ? "pr-9" : "pr-3"} text-gray-700 border border-gray-200 outline-0 ${this.state.error.length > 0 ? " ring-1 ring-red-200 " : " focus:border-blue-200 "} rounded-lg ${className}`}
                     type={type}
+                    pattern={this.props.regExp?.source}
                     value={this.state.value}
                     onChange={this.handleChange}
                     onFocus={this.handleFocus}
