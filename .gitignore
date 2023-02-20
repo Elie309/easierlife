@@ -1,0 +1,8 @@
+node_modules
+
+easierlife-privatekey.json
+
+/.cache
+/build
+/public/build
+.env
