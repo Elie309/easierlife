@@ -123,8 +123,8 @@ function LinkComponent(props: { link: link, path: string }) {
 
   return (
     <li key={props.link.href}>
-      <Link
-        to={props.link.href}
+      <a
+        href={props.link.href}
         className={`block py-2 pl-3 pr-4 
           text-skin-base rounded-lg
           md:hover:bg-transparent 
@@ -136,7 +136,7 @@ function LinkComponent(props: { link: link, path: string }) {
           `}>
         {props.link.label}
 
-      </Link>
+      </a>
     </li>
   )
 

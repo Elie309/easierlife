@@ -49,7 +49,7 @@ function Document({ children }: { children: React.ReactNode }) {
         <Meta />
         <Links />
       </head>
-      <body className="theme-dark bg-skin-fill">
+      <body className="bg-skin-fill">
         {children}
         <ScrollRestoration />
         <Scripts />

@@ -1,15 +1,14 @@
 import React from "react";
 import { Link, useFetcher } from "@remix-run/react";
 import { regEmail, regPasswordForLogin } from "config";
-import { serverAuth } from "app/firebase/firebase.server";
 import { clientAuth } from "app/firebase/firebase.client";
 import EasierLifeLogo from "~/components/EasierLifeLogo";
 import FormInput from "~/components/FormInput";
-import { session, getSessionState } from "~/utils/cookies";
+import { getSessionState } from "~/utils/cookies";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { ActionFunction, LoaderFunction } from "@remix-run/node";
 import { redirect } from "@remix-run/node";
-
+import { tokenHelper } from "~/utils/sessionHelper";
 
 //TODO: REMEMBER ME WITH COOKIES
 
@@ -19,44 +18,21 @@ export let action: ActionFunction = async ({ request }) => {
 
     if (request.method === "POST") {
 
-        try {
 
             const form = await request.formData();
-            console.log(form);
-
 
             const idToken = form.get("idToken")?.toString();
 
+            if(!idToken) {
+                return redirect("/login", {
+                    status: 500,
+                    statusText: "No id Token",
+                });
+            }
 
-            await serverAuth.verifyIdToken(idToken!);
-
-            const jwt = await serverAuth.createSessionCookie(idToken!, {
-                // 5 days - can be up to 2 weeks
-                expiresIn: 60 * 60 * 24 * 5 * 1000,
-            });
-
-            return redirect("/", {
-                headers: {
-                    "Set-Cookie": await session.serialize(jwt),
-                },
-                status: 302,
-                statusText: "Login Successful",
-            });
-
-        } catch (e: any) {
-            return redirect("/login", {
-                headers: {
-                    "Set-Cookie": "",
-                },
-                status: 401,
-                statusText: e.message,
-            });
+            return await tokenHelper(idToken!, "Login Sueccessful", "/dashboard", "/login");
 
         }
-
-
-    }
-
 
 
 }
@@ -67,8 +43,7 @@ export let loader: LoaderFunction  = async ({request})=> {
 
     try{
         
-        const sessionState = await getSessionState(request, "/");
-
+        const sessionState = await getSessionState(request,true, false, "/dashboard", null);
         return sessionState;
 
     }catch(e: any){

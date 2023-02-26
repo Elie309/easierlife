@@ -1,78 +1,22 @@
 import React from "react";
-import { Link, useFetcher } from "@remix-run/react";
-import { serverAuth } from "app/firebase/firebase.server"
+import { Link } from "@remix-run/react";
 import { regEmail, regPasswordForRegistration, regUsername } from "config";
 import EasierLifeLogo from "~/components/EasierLifeLogo";
 import FormInput from "~/components/FormInput";
-import { ActionFunction, LoaderFunction, redirect } from "@remix-run/node";
+import { createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from "firebase/auth";
+import { LoaderFunction, redirect } from "@remix-run/node";
 import { getSessionState } from "~/utils/cookies";
+import { clientAuth } from "~/firebase/firebase.client";
 
 
-// #region ACTION
-
-export let action: ActionFunction = async ({ request }) => {
-
-    if (request.method === "POST") {
-
-        try {
-
-            const form = await request.formData();
-
-            const email = form.get("email")?.toString();
-            const password = form.get("password")?.toString();
-            const username = form.get("username")?.toString();
-
-
-            if (!email || !regEmail.test(email) 
-            || !password || !regPasswordForRegistration.test(password)
-            || !username || !regUsername.test(username)) {
-                return redirect("/register", {
-                    headers: {
-                        "Set-Cookie": "",
-                    },
-                    status: 401,
-                    statusText: "Please enter an username, email or password that follows the required format",
-                });
-            }
-
-            await serverAuth.createUser({
-                displayName: username,
-                email,
-                password,
-                emailVerified: false,
-            });
-                
-
-            return redirect("/verify-email", {
-                status: 201,
-                statusText: "Registered Successfully",
-            });
-
-
-        } catch (e: any) {
-            return redirect("/register", {
-                headers: {
-                    "Set-Cookie": "",
-                },
-                status: 400,
-                statusText: e.message,
-            });
-
-        }
-
-
-    }
-}
-
-// #endregion
 
 //#region LOADER
 export const loader: LoaderFunction = async ({ request }) => {
 
     try {
-        
-        const sessionState = await getSessionState(request, "/");
-        
+
+        const sessionState = await getSessionState(request, true, false, "/dashboard", null);
+
         return sessionState;
     } catch (e: any) {
 
@@ -91,13 +35,12 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export default function register() {
 
-    const fetcher = useFetcher();
-    const [loading, setLoading] = React.useState(false);
-    const [error, setError] = React.useState("");
+    const [state, setState] = React.useState<"idle" | "loading" | "error" | "done">("idle");
+    const [message, setMessage] = React.useState("");
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        setLoading(true);
+        setState("loading");
 
         const form = event.currentTarget as HTMLFormElement;
         const email = form.email.value;
@@ -108,24 +51,24 @@ export default function register() {
         if (!email || !regEmail.test(email as string)
             || !password || !regPasswordForRegistration.test(password as string)
             || !username || !regUsername.test(username as string)) {
-            setError("Please enter an email and password that follows the required format");
+            setMessage("Please enter an email and password that follows the required format");
             return;
         }
 
         try {
-            fetcher.submit({username, email, password}, {
-                method: "post",
-            })
-            
-            if(fetcher.type === "done"){
-                setLoading(false);
-           }
 
+            const credentials = await createUserWithEmailAndPassword(clientAuth, email, password);
+            //TODO: Username unique check
+            await updateProfile(credentials.user, { displayName: username });
 
+            sendEmailVerification(credentials.user);
+
+            setState("done");
+            setMessage("Please verify your email address before logging in");
 
         } catch (e: any) {
-            setLoading(false);
-            setError(e.message);
+            setState("error");
+            setMessage(e.message);
         }
 
 
@@ -147,9 +90,9 @@ export default function register() {
 
             <p className="font-bold text-2xl md:text-3xl text-skin-muted">Get Started, it's free!!</p>
 
-            <fetcher.Form
+            <form
                 onSubmit={handleSubmit}
-                method="post"
+                method="POST"
                 className="w-full md:w-2/4 px-4 sm:px-6 lg:px-8 py-8"
             >
 
@@ -179,6 +122,14 @@ export default function register() {
                     errorMessage="Password must contain at least 8 characters, one uppercase letter, one lowercase letter, one number and one special character"
                 />
 
+                {state === "done" &&
+                    <div className="w-full px-4 sm:px-6 lg:px-8 py-2">
+                        <p id="error-message-form" className="w-full text-sm text-center text-green-600">
+                            {message}
+                        </p>
+                    </div>
+                }
+
                 <input
                     type="submit"
                     className={`w-full bg-skin-button-accent 
@@ -186,16 +137,17 @@ export default function register() {
                         text-white font-bold py-2 px-4 rounded 
                         focus:outline-none focus:shadow-outline
                         hover:cursor-pointer 
-                        ${loading ? "opacity-50 cursor-wait" : ""}`}
-                    value={loading ? "Loading..." : "Login"}
+                        ${(state === "loading" || state === "done") ? "opacity-50 cursor-wait" : ""}`}
+                    disabled={state === "loading" || state === "done"}
+                    value={state === "loading" ? "Loading..." : state === "done" ? "Done" : "Register"}
                 />
 
 
-            </fetcher.Form>
+            </form>
 
-            <div className="w-full md:w-2/4 px-4 sm:px-6 lg:px-8 py-2">
-                <p id="error-message-form" className="w-full text-sm text-center text-red-600">{error}</p>
-            </div>
+            {state === "error" && <div className="w-full md:w-2/4 px-4 sm:px-6 lg:px-8 py-2">
+                <p id="error-message-form" className="w-full text-sm text-center text-red-600">{message}</p>
+            </div>}
 
             <div className="w-full md:w-2/4 px-4 sm:px-6 lg:px-8 py-2">
                 <p className="w-full text-sm text-center text-skin-muted hover:text-skin-inverted"><Link to="/login">Already have an account ? Login!</Link></p>
